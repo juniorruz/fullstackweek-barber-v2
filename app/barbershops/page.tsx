@@ -10,8 +10,8 @@ interface BarbershopsPageProps {
   }
 }
 
-const BarbershopsPage = async ({ searchParams }: BarbershopsPageProps) => {
-  const barbershops = await db.barbershop.findMany({
+const barbershopsPage = async ({ searchParams }: BarbershopsPageProps) => {
+  const barbers = await db.barber.findMany({
     where: {
       OR: [
         searchParams?.title
@@ -28,7 +28,6 @@ const BarbershopsPage = async ({ searchParams }: BarbershopsPageProps) => {
                 some: {
                   name: {
                     contains: searchParams.service,
-                    mode: "insensitive",
                   },
                 },
               },
@@ -37,7 +36,6 @@ const BarbershopsPage = async ({ searchParams }: BarbershopsPageProps) => {
       ],
     },
   })
-
   return (
     <div>
       <Header />
@@ -49,9 +47,10 @@ const BarbershopsPage = async ({ searchParams }: BarbershopsPageProps) => {
           Resultados para &quot;{searchParams?.title || searchParams?.service}
           &quot;
         </h2>
+
         <div className="grid grid-cols-2 gap-4">
-          {barbershops.map((barbershop) => (
-            <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+          {barbers.map((barbers) => (
+            <BarbershopItem key={barbers.id} barber={barbers} />
           ))}
         </div>
       </div>
@@ -59,4 +58,4 @@ const BarbershopsPage = async ({ searchParams }: BarbershopsPageProps) => {
   )
 }
 
-export default BarbershopsPage
+export default barbershopsPage
