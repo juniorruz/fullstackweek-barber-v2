@@ -19,7 +19,7 @@ export const getConfirmedBookings = async () => {
     include: {
       service: {
         include: {
-          barbershop: true,
+          barber: true,
         },
       },
     },

@@ -8,6 +8,7 @@ import { authOptions } from "../_lib/auth"
 interface CreateBookingParams {
   serviceId: string
   date: Date
+  barberId: string
 }
 
 export const createBooking = async (params: CreateBookingParams) => {
@@ -15,8 +16,14 @@ export const createBooking = async (params: CreateBookingParams) => {
   if (!user) {
     throw new Error("Usuário não autenticado")
   }
+
   await db.booking.create({
-    data: { ...params, userId: (user.user as any).id },
+    data: {
+      date: params.date,
+      user: { connect: { id: (user.user as any).id } },
+      service: { connect: { id: params.serviceId } },
+      barber: { connect: { id: params.barberId } },
+    },
   })
   revalidatePath("/barbershops/[id]")
   revalidatePath("/bookings")
